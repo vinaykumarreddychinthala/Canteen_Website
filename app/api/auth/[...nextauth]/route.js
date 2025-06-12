@@ -3,17 +3,7 @@ import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 import FacebookProvider from "next-auth/providers/facebook";
 import bcrypt from "bcryptjs";
-import  { connectDB } from "@/lib/mongodb";
-import User from "@/models/user";
-
-(async () => {
-    try {
-        await connectDB();
-        console.log("MongoDB connected successfully");
-    } catch (error) {
-        console.error("MongoDB connection error:", error);
-    }
-})();
+import { DetailsModel } from "@/models/user";
 
 export const authOptions = {
     providers: [
@@ -33,7 +23,7 @@ export const authOptions = {
                     console.log('Authorize: Missing credentials');
                     return null; // Indicate failure: missing input
                   }
-                await connectDB();
+                const User = await DetailsModel();
                 const user = await User.findOne({ email: credentials.email });
                 // const user = await db.collection("users").findOne({ email: credentials.email });
                 console.log(user);

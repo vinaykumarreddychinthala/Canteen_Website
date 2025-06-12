@@ -5,8 +5,7 @@ import { NextResponse } from "next/server";
 
 export async function GET(){
     try{
-        const conn = await connectDB_2();
-        const Order = getOrderModel(conn);
+        const Order = await getOrderModel();
         const orders = await Order.find();
         return NextResponse.json(orders,{status:200});
     }catch(error){

@@ -23,7 +23,7 @@ export async function DetailsModel(){
     
     // {timestamps: true } adds two fields "createdAt" and "updatedAt" => when the document is created and is updated.
     
-    return db.models.User || mongoose.model('User', userSchema,'users');
+    return db.models.User || db.model('User', userSchema,'users');
 
 
 

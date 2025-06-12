@@ -4,14 +4,12 @@ import Link from "next/link";
 import Image from "next/image";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { CartContext } from "../context/CartContext";
 export default function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [activeLink, setActiveLink] = useState("login");
     const [error, setError] = useState(""); // Add error state
     const router = useRouter(); // Get the router
-    const {cartItems, setCartItems, addToCart,increaseQuantity , decreaseQuantity,removecart} = useContext(CartContext);
     const handleSubmit = async (e) => {
         e.preventDefault();
         

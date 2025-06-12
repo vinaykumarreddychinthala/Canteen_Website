@@ -6,7 +6,6 @@ export async function getOrderModel(){
   const mongooseInstance = await connectToDatabase();
   const db = mongooseInstance.connection.useDb("customer_details");
 
-
   const orderschema = new mongoose.Schema({
       username : {
           type: String,

@@ -16,7 +16,7 @@ export default function Admin(){
 useEffect(() => {
   const fetchOrders = async () => {
     try {
-      const res = await fetch("/api/admin_orders");
+      const res = await fetch("/api/admin_get_orders");
       const data = await res.json();
 
       const formatted = data.reduce((acc, order) => {
@@ -59,22 +59,27 @@ useEffect(() => {
         const isordered = isChecked[username]?? false;
         const time = delaytime[username] ?? 0;
         const handleupdate = async()=>{
-            const res = await fetch("api/admin_update_order",{
+            const res = await fetch("api/admin_update_orderstatus",{
                 method: "POST",
                 headers: {"Content-Type": "application/json"},
                 body: JSON.stringify({
-                    username,
+                    username:username,
                     isCompleted: isordered,
                     estimatedtime:time ,
                 })
             });
             const data = await res.json();
             alert(data.message);
-            setupdatesent((prev)=>{
-                return{
-                    ...prev,[username] : true,
-                }
-            })
+            if(res.ok){
+                setupdatesent((prev)=>{
+                    return{
+                        ...prev,[username] : true,
+                    }
+                })
+            }
+            else{
+                console.log("the error is :" , data.message);
+            }
         };
         handleupdate();
         

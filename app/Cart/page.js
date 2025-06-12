@@ -11,6 +11,7 @@ export default function Cart() {
   const [finalprice,setfinalprice] = useState(0);
   const [orderStatus, setOrderStatus] = useState(null);
   const { cartItems, setCartItems, addToCart, increaseQuantity, decreaseQuantity, removeCart } = useContext(CartContext);
+  const [order_collected,setoreder_collected] = useState(false);
   
   const [myorder, setmyorder] = useState(() => {
     const saved = localStorage.getItem("myorder");
@@ -73,17 +74,16 @@ export default function Cart() {
 
    useEffect(() => {
     const fetchOrder = async () => {
-      const res = await fetch(`/api/client-get-order?username=${username}`);
+      const res = await fetch(`/api/client_get_orderstatus`);
       if (res.ok) {
         const data = await res.json();
+        console.log(data);
         setOrderStatus(data);
-      } else {
-        setOrderStatus({ message: "No order found." });
       }
     };
     
     fetchOrder();
-    const interval = setInterval(fetchOrder, 10000); // Poll every 10s
+    const interval = setInterval(fetchOrder, 3000); // Poll every 10s
     return () => clearInterval(interval);
   }, [username]);
   
@@ -98,19 +98,20 @@ export default function Cart() {
       return;
     }
     try {
-      const result = await fetch('api/orders', {
+      const result = await fetch('api/clients_post_order', {
         method: 'POST',
         headers: { 'content-Type': 'application/json' },
         body: JSON.stringify({ username, items: userCart, totalPrice })
       });
       const data = await result.json();
+      console.log(data);
       if(!result.ok){
         throw new Error(data.message || "failed to place order");
       }
       alert(data.message);
       setorderplaced(true);
       setmyorder(data.order);
-      removeCart(username);
+      // removeCart(username);
       
     } catch (error) {
       alert("Failed to place order");
@@ -118,6 +119,46 @@ export default function Cart() {
       setorderplaced(false);
     }
   };
+
+  //handle collect button
+
+async function handlecollect() {
+  try {
+    const result_collect = await fetch('api/orderstatus_remove', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username })
+    });
+
+    const data = await result_collect.json();
+
+    if (!result_collect.ok) {
+      throw new Error(data.message || "Something went wrong");
+    }
+
+    alert(data.message);
+    console.log(data.message);
+
+    const result_orderremoval = await fetch('api/remove_order', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username })
+    });
+    const data_2 = await result_orderremoval.json();
+    if(!result_orderremoval.ok){
+      throw new Error(data_2.message || "Something went wrong");
+    }
+    alert(data_2.message);
+    console.log(data_2.message);
+  } catch (err) {
+    alert("Error: " + err.message);
+    console.error(err);
+  }
+
+  setoreder_collected(true);
+  
+}
+
 
   return (
     <div>
@@ -168,31 +209,43 @@ export default function Cart() {
       )}
 
 
-      {/* Conditionally render order summary */}
-          {orderplaced && myorder.length >0 ? (
-            <div className="ml-[400px] mt-10 p-4 border-t-2 border-lime-400 w-[750px]">
-              <h2 className="text-2xl font-bold text-lime-800 mb-4">Your Order</h2>
-              {myorder.map(item => (
-                <div key={item.id} className="flex justify-between mb-2">
-                  <span>{item.name} x {item.quantity}</span>
-                  <span>₹{item.price * item.quantity}</span>
-                </div>
-              ))}
-              <hr className="border-lime-400 my-4" />
-              <div className="flex justify-between font-bold text-xl">
-                <span>Total Amount:</span>
-                <span>₹{finalprice}</span>
-              </div>
-            </div>
-          ):""}
+      {orderplaced && myorder.length > 0 ? (
+      <div className="ml-[400px] mt-10 p-4 border-t-2 border-lime-400 w-[750px]">
+        <h2 className="text-2xl font-bold text-lime-800 mb-4">Your Order</h2>
+
+        {myorder.map(item => (
+          <div key={item.id} className="flex justify-between mb-2">
+            <span>{item.name} x {item.quantity}</span>
+            <span>₹{item.price * item.quantity}</span>
+          </div>
+        ))}
+
+        <hr className="border-lime-400 my-4" />
+
+        <div className="flex justify-between font-bold text-xl">
+          <span>Total Amount:</span>
+          <span>₹{finalprice}</span>
+        </div>
+
+          {/* ✅ Order status line placed separately for clarity */}
+          <p className="text-lime-700 mt-2 font-medium">Order status: Pending</p>
+      </div>
+        ) : null}
 
 
-          {orderplaced && orderStatus !== null?(
+
+          {orderplaced && orderStatus && !order_collected?(
             <div>
               {orderStatus.iscompleted?(
                   <div className="mt-4 text-lime-700">
                     <p>Order Status: completed </p>
                     <p className="text-green-700 mt-4">Your order is completed. Thank you!</p>
+                    <button
+                      className='bg-lime-400 rounded-lg w-[130px] h-[35px] ml-[70px] text-white font-semibold transition duration-300 ease-in-out transform hover:bg-lime-500 hover:shadow-lg hover:scale-105'
+                      onClick={handlecollect}
+                    >
+                      collect
+                    </button>
                   </div>
               ):(
                   <div>
@@ -206,6 +259,12 @@ export default function Cart() {
               
             </div>
           )}
+
+          {order_collected?(
+            <div>place a new order , Go and grab some items</div>
+          ):null}
+
+
             
     </div>
   );
