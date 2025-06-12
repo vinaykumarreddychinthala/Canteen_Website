@@ -62,8 +62,8 @@ export default function Cart() {
 // useeffect for to calculate the total price after the order being placed
 
   useEffect(()=>{
-    if(myorder.length>0){
-      const total = myorder.reduce((total,item)=>total + item.price * item.quantity, 0);
+    if(myorder.items.length>0){
+      const total = myorder.items.reduce((total,item)=>total + item.price * item.quantity, 0);
       setfinalprice(total);
     }
   },[myorder]);
@@ -112,6 +112,7 @@ export default function Cart() {
       setorderplaced(true);
       setmyorder(data.order);
       // removeCart(username);
+      console.log(myorder);
       
     } catch (error) {
       alert("Failed to place order");
@@ -209,11 +210,11 @@ async function handlecollect() {
       )}
 
 
-      {orderplaced && myorder.length > 0 ? (
+      {orderplaced && !order_collected? (
       <div className="ml-[400px] mt-10 p-4 border-t-2 border-lime-400 w-[750px]">
         <h2 className="text-2xl font-bold text-lime-800 mb-4">Your Order</h2>
 
-        {myorder.map(item => (
+        {myorder.items.map(item => (
           <div key={item.id} className="flex justify-between mb-2">
             <span>{item.name} x {item.quantity}</span>
             <span>₹{item.price * item.quantity}</span>
@@ -233,32 +234,35 @@ async function handlecollect() {
         ) : null}
 
 
-
-          {orderplaced && orderStatus && !order_collected?(
-            <div>
-              {orderStatus.iscompleted?(
-                  <div className="mt-4 text-lime-700">
-                    <p>Order Status: completed </p>
-                    <p className="text-green-700 mt-4">Your order is completed. Thank you!</p>
-                    <button
-                      className='bg-lime-400 rounded-lg w-[130px] h-[35px] ml-[70px] text-white font-semibold transition duration-300 ease-in-out transform hover:bg-lime-500 hover:shadow-lg hover:scale-105'
-                      onClick={handlecollect}
-                    >
-                      collect
-                    </button>
-                  </div>
-              ):(
-                  <div>
-                    <p>Estimated Preparation Time: {orderStatus.estimatedtime} minutes</p>
-                  </div>
-              )}
-            </div>
-          ):(
-            <div>
-              <p>order status pending</p>
-              
-            </div>
-          )}
+        {!order_collected ?(
+          <div>
+            {orderplaced && orderStatus && !order_collected?(
+              <div>
+                {orderStatus.iscompleted?(
+                    <div className="mt-4 text-lime-700">
+                      <p>Order Status: completed </p>
+                      <p className="text-green-700 mt-4">Your order is completed. Thank you!</p>
+                      <button
+                        className='bg-lime-400 rounded-lg w-[130px] h-[35px] ml-[70px] text-white font-semibold transition duration-300 ease-in-out transform hover:bg-lime-500 hover:shadow-lg hover:scale-105'
+                        onClick={handlecollect}
+                      >
+                        collect
+                      </button>
+                    </div>
+                ):(
+                    <div>
+                      <p>Estimated Preparation Time: {orderStatus.estimatedtime} minutes</p>
+                    </div>
+                )}
+              </div>
+            ):(
+              <div>
+                <p>order status pending</p>
+                
+              </div>
+            )}
+          </div>
+          ):null}
 
           {order_collected?(
             <div>place a new order , Go and grab some items</div>
