@@ -48,9 +48,12 @@ export const authOptions = {
         strategy: "jwt",  // or "database" (if you have a dedicated session DB)
     },
     secret: process.env.NEXTAUTH_SECRET, //VERY IMPORTANT: secure your app
+
+    //callbacks here are middleware functions
     callbacks: {
         jwt: async ({ token, user }) => {
             // Persist the userId to the token when signing in (only the first time)
+             // 'user' is the object that came from the authorize function 
             if (user) {
                 token.uid = user.id;
             }
@@ -58,6 +61,7 @@ export const authOptions = {
         },
         session: async ({ session, token }) => {
             // Send properties to the client session
+            //If the token is successfully verified, NextAuth then calls your session callback. The purpose of this callback is to control what information from the token is exposed to the client-side session object (which you access with the useSession hook).
             session.user.id = token.uid;  // Attach user ID to the session
             return session;
         },
@@ -72,3 +76,29 @@ const handler = NextAuth(authOptions)
 
 export { handler as GET, handler as POST }
 
+
+
+// Login:
+// User Credentials -> authorize() -> User Object {id, name} -> JWT Created -> jwt() callback adds uid -> Token Signed with Secret -> Cookie sent to Client
+// Authenticated Request:
+// Client sends Cookie -> Server receives JWT -> Verify Signature & Expiration -> session() callback adds id to session -> Session data available to App
+
+
+
+// User logs in →
+//   authorize() in CredentialsProvider validates user →
+//     returns { id, name, email }
+//       ↓
+// NextAuth creates JWT (if `strategy: "jwt"`) →
+//   jwt() callback runs:
+//     token = { name, email, picture, sub, **uid** } → token returned
+//       ↓
+// JWT is signed with secret and placed in a cookie
+//       ↓
+// Client makes authenticated requests →
+//   Server verifies JWT from cookie →
+//     session() callback runs:
+//       builds session from token →
+//       session.user.id = token.uid
+//         ↓
+// Returned to client via useSession()

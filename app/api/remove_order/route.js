@@ -7,10 +7,10 @@ export async function POST(req) {  // ✅ Fix: req was missing
     const result = await req.json();
 
     // Delete the order
-    await Order.deleteMany({ username: result.username });
+    await Order.deleteOne({ _id: result._id });
 
     // ✅ Await and use findOne (faster if you're only checking existence)
-    const findout = await Order.findOne({ username: result.username });
+    const findout = await Order.findOne({ _id: result._id });
 
     if (findout) {
       // If still found → deletion failed
@@ -21,7 +21,7 @@ export async function POST(req) {  // ✅ Fix: req was missing
     } else {
       // If not found → deletion successful
       return NextResponse.json(
-        { message: "Order collected successfully, please visit again" },
+        { message: "Thanks for collecting your order, please visit again" },
         { status: 200 }
       );
     }
