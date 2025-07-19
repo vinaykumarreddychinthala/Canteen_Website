@@ -14,6 +14,8 @@ pnpm dev
 bun dev
 ```
 
+open https://canteen-website-96hlya6lz-vinay-kumar-reddys-projects-49738864.vercel.app to see the result
+or
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 after heading into website, you will get to see
