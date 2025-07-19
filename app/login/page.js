@@ -13,7 +13,7 @@ export default function Login() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         
-        const res = await fetch("api/admin",{
+        const res = await fetch("/api/admin",{
             method: "POST",
             body: JSON.stringify({email,password}),
         });
