@@ -104,12 +104,6 @@ export default function Login() {
                         Sign in with Google
                     </button>
 
-                    <button
-                        onClick={() => signIn("facebook", { callbackUrl: "/" })}
-                        className="bg-blue-600 text-white p-2 rounded w-64 mt-2"
-                    >
-                        Sign in with Facebook
-                    </button>
                 </div>
             </div>
         </div>
