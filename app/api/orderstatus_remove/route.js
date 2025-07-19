@@ -1,16 +1,17 @@
 import { getStatusModel } from "@/models/orderstatus";
 import { NextResponse } from "next/server";
+import {Types} from "mongoose";
 
 export async function POST(req) {
   try {
     const orderStatus = await getStatusModel();
     const body = await req.json();
+    const query = { _id: body._id };
+    // Delete the order for the given id
+    await orderStatus.deleteOne(query);
 
-    // Delete the order for the given username
-    await orderStatus.deleteMany({ username: body.username });
-
-    // 🔴 ISSUE: "username" here is undefined — should be body.username
-    const findout = await orderStatus.findOne({ username: body.username });
+    //  ISSUE: "id" here is undefined — should be body.id
+    const findout = await orderStatus.findOne(query);
 
     if (findout) {
       // If still found → deletion failed

@@ -6,7 +6,7 @@ export async function POST(req){
     try{
         const Order = await getOrderModel();
         const body = await req.json();
-        const neworder = new Order({username:body.username,items:body.items,totalprice:body.totalPrice});
+        const neworder = new Order({username:body.username,items:body.items,totalprice:body.totalPrice,user_id:body.user_id});
         await neworder.save();
         const orderresponse = {
             message: "order placed successfully",
