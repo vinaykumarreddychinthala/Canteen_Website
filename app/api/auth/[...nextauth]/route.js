@@ -26,9 +26,8 @@ export const authOptions = {
                   }
                 const User = await DetailsModel();
                 const user = await User.findOne({ email: credentials.email });
-                // const user = await db.collection("users").findOne({ email: credentials.email });
+                console.log("credentials verified");
                 console.log(user);
-                console.log("botta");
                 if (!user) {
                     console.log(`Authorize: No user found for email: ${credentials.email}`);
                     return null; // Indicate failure: user not found
@@ -38,6 +37,7 @@ export const authOptions = {
                     console.log(`Authorize: Invalid password for email: ${credentials.email}`);
                     return null;
                 }
+                
               
                 return { id: user._id.toString(), name: user.username, email: user.email };
                 
@@ -59,13 +59,14 @@ export const authOptions = {
             if (user) {
                 token.uid = user.id;
                 token.email = user.email;
-            }
+            } 
             return token;
         },
         session: async ({ session, token }) => {
             // Send properties to the client session
             //If the token is successfully verified, NextAuth then calls your session callback. The purpose of this callback is to control what information from the token is exposed to the client-side session object (which you access with the useSession hook).
-            session.user.id = token.uid;  // Attach user ID to the session
+            session.user.id = token.uid;
+            session.user.email = token.email;  // Attach user ID to the session
             return session;
         },
     },
