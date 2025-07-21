@@ -12,11 +12,11 @@ export default function Login() {
     const router = useRouter(); // Get the router
     const handleSubmit = async (e) => {
         e.preventDefault();
-
+        const redirectTo = email === process.env.NEXT_PUBLIC_ADMIN_EMAIL ? "/admin" : "/";
             const result = await signIn("credentials", {
                 email,
                 password,
-                redirect: false,
+                callbackUrl:redirectTo,
             });
     
             if (result?.error) {
@@ -25,13 +25,6 @@ export default function Login() {
             } else {
                 // Login successful
                 console.log("Login successful!");
-                if(email === process.env.NEXT_PUBLIC_ADMIN_EMAIL){
-                    console.log("redirecting to admin page");
-                    router.push("/admin"); // Redirect to the home page after successful login
-                }
-                else {
-                    router.push("/");
-                }
             }
     
 
