@@ -37,6 +37,7 @@ export const authOptions = {
                     console.log(`Authorize: Invalid password for email: ${credentials.email}`);
                     return null;
                 }
+                console.log("user successfully authenticated");
                 
               
                 return { id: user._id.toString(), name: user.username, email: user.email };
