@@ -12,19 +12,10 @@ export default function Login() {
     const router = useRouter(); // Get the router
     const handleSubmit = async (e) => {
         e.preventDefault();
-        
-        const res = await fetch("api/admin",{
-            method: "POST",
-            body: JSON.stringify({email,password}),
-        });
-        if(res.ok){
-            router.push("/admin");
-        }
-        else{
             const result = await signIn("credentials", {
-                redirect: false,
                 email,
                 password,
+                redirect: false,
             });
     
             if (result?.error) {
@@ -33,9 +24,14 @@ export default function Login() {
             } else {
                 // Login successful
                 console.log("Login successful!");
-                router.push("/"); // Redirect to the home page after successful login
+                if(email === process.env.NEXT_PUBLIC_ADMIN_EMAIL){
+                    console.log("redirecting to admin page");
+                    router.push("/admin"); // Redirect to the home page after successful login
+                }
+                else {
+                    router.push("/");
+                }
             }
-        }
     
 
     };
@@ -104,12 +100,6 @@ export default function Login() {
                         Sign in with Google
                     </button>
 
-                    <button
-                        onClick={() => signIn("facebook", { callbackUrl: "/" })}
-                        className="bg-blue-600 text-white p-2 rounded w-64 mt-2"
-                    >
-                        Sign in with Facebook
-                    </button>
                 </div>
             </div>
         </div>

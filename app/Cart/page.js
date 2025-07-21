@@ -44,7 +44,7 @@ export default function Cart() {
       return;
     }
     try {
-      const result = await fetch('api/clients_post_order', {
+      const result = await fetch('/api/clients_post_order', {
         method: 'POST',
         headers: { 'content-Type': 'application/json' },
         body: JSON.stringify({ username, items: userCart, totalPrice, user_id})
@@ -56,7 +56,7 @@ export default function Cart() {
       }
       alert(data.message);
       removeCart();
-      router.push("/Cart/placed_order");
+      router.push("/placed_order");
     } catch (error) {
       alert("Failed to place order");
       console.log(error);

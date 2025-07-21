@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { useContext } from 'react';
 import { useSession } from 'next-auth/react';
-import { CartContext } from '../../context/CartContext';
+import { CartContext } from '../context/CartContext';
 
 export default function Placed_order() {
   const { data: session, status } = useSession();
