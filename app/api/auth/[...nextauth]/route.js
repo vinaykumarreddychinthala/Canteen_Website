@@ -4,6 +4,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import FacebookProvider from "next-auth/providers/facebook";
 import bcrypt from "bcryptjs";
 import { DetailsModel } from "@/models/user";
+import { getMaxAge } from "next/dist/server/image-optimizer";
 
 export const authOptions = {
     providers: [
@@ -45,7 +46,8 @@ export const authOptions = {
         }),
     ],
     session: {
-        strategy: "jwt",  // or "database" (if you have a dedicated session DB)
+        strategy: "jwt",   // or "database" (if you have a dedicated session DB)
+        maxAge: 60*60, // 1 hour in seconds 
     },
     secret: process.env.NEXTAUTH_SECRET, //VERY IMPORTANT: secure your app
 
@@ -56,6 +58,7 @@ export const authOptions = {
              // 'user' is the object that came from the authorize function 
             if (user) {
                 token.uid = user.id;
+                token.email = user.email;
             }
             return token;
         },
