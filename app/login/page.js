@@ -12,6 +12,7 @@ export default function Login() {
     const router = useRouter(); // Get the router
     const handleSubmit = async (e) => {
         e.preventDefault();
+
             const result = await signIn("credentials", {
                 email,
                 password,
