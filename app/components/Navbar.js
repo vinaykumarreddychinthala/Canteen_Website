@@ -4,7 +4,7 @@ import cartimage from "../images/shopping-cart.png";
 export default function Navbar(){
     return (
         <div className="bg-lime-500 h-18  text-white flex space-x-4 justify-between ">
-            <div className="p-3 mx-3">logo</div>
+            <div className="p-3 mx-3"> </div>
             <div className="">
                 <ul className="flex space-x-10 p-3">
                     <li><Link href="/">Home</Link></li>
