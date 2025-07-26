@@ -132,56 +132,62 @@ useEffect(() => {
 
     return(
         <>
-            <div>
+            <div className="max-w-2xl mx-auto p-2 md:p-8">
                 {Object.entries(admin_orders).map(([_id, [username,items]]) => (
-                    <div key={_id}>
-                        <h1 className="text-black font-black">{username} Order</h1>
-
-                        {Array.isArray(items) ? (
-                        items.map(item => (
-                            <div key={item.id}>
-                            <p>{item.name} - {item.quantity}</p>
-                            </div>
-                        ),
-
-                    )
-                ) : (
-                    <p>Invalid cart format for {username}</p>
-                )}
-                
-                <p>total Price: {calprice(items)}</p>
-                {!updatesent[_id]?
-                    <div>
-                        <div className="flex items-center space-x-4 mt-4">
-                            <label className="text-lg font-medium">Is Order Completed?</label>
-                            <input
-                                type="checkbox"
-                                checked={!!isChecked[_id]} //if it is true then checked symbol shows if false then nothing shows
-                                onChange={handleCheckboxChange(_id)}
-                                className="w-5 h-5 text-green-600 accent-green-500"
-                            />
-                            <span className="text-md">
-                                {isChecked[_id] ? '✅ Yes' : '❌ No'}
-                            </span>
+                    <div key={_id} className="bg-white rounded-xl shadow-md mb-8 p-4 md:p-8">
+                        <h1 className="text-lime-900 font-bold text-lg md:text-2xl mb-2">{username} Order</h1>
+                        <div className="space-y-1">
+                            {Array.isArray(items) ? (
+                                items.map(item => (
+                                    <div key={item.id} className="flex justify-between text-base md:text-lg">
+                                        <span>{item.name}</span>
+                                        <span className="font-semibold text-lime-700">x{item.quantity}</span>
+                                    </div>
+                                ))
+                            ) : (
+                                <p className="text-red-500">Invalid cart format for {username}</p>
+                            )}
                         </div>
-                        {!isChecked[_id]?
-                            <div>
-                                <label htmlFor="text">Waiting time(in min):</label>
-                                <input type="number" onChange={handletime(_id)} className="w-20 h-4 border-2 border-blue-400" />
-                            </div>:""
-                        }
-                        <button className="bg-amber-700" onClick={()=>handleSend(_id,username)}>Send</button>
-                        <br />
+                        <p className="mt-2 font-medium text-lime-800">Total Price: <span className="font-bold">₹{calprice(items)}</span></p>
+                        {!updatesent[_id] ? (
+                            <div className="mt-4">
+                                <div className="flex flex-col md:flex-row md:items-center md:space-x-4 space-y-2 md:space-y-0">
+                                    <label className="text-base md:text-lg font-medium">Is Order Completed?</label>
+                                    <input
+                                        type="checkbox"
+                                        checked={!!isChecked[_id]}
+                                        onChange={handleCheckboxChange(_id)}
+                                        className="w-5 h-5 text-green-600 accent-green-500"
+                                    />
+                                    <span className="text-md">
+                                        {isChecked[_id] ? '✅ Yes' : '❌ No'}
+                                    </span>
+                                </div>
+                                {!isChecked[_id] && (
+                                    <div className="mt-3 flex flex-col md:flex-row md:items-center md:space-x-2">
+                                        <label htmlFor="text" className="text-base">Waiting time (in min):</label>
+                                        <input
+                                            type="number"
+                                            onChange={handletime(_id)}
+                                            className="w-24 h-8 border-2 border-blue-400 rounded-md px-2 mt-1 md:mt-0"
+                                            min="0"
+                                        />
+                                    </div>
+                                )}
+                                <button
+                                    className="mt-4 bg-amber-700 hover:bg-amber-800 text-white font-semibold px-6 py-2 rounded-lg transition"
+                                    onClick={()=>handleSend(_id,username)}
+                                >
+                                    Send
+                                </button>
+                            </div>
+                        ) : (
+                            <div className="mt-4">
+                                <p className="text-green-700 font-semibold">Order update sent</p>
+                            </div>
+                        )}
                     </div>
-                :
-                    <div>
-                        <p>orderupdate sent</p>
-                    </div>
-                   }
-                </div>
-                )
-                )}
-
+                ))}
             </div>
 
         </>
