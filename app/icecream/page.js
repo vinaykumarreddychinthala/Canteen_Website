@@ -3,24 +3,24 @@ import React from "react";
 import { CartContext } from '../context/CartContext';
 import { useContext } from "react";
 import Image from "next/image";
-import mango from '../images/mango.jpeg';
-import apple from '../images/apple.jpeg';
-import orange from '../images/orange.jpeg';
-import oreo from '../images/oreo.jpeg';
-import milkshake from '../images/milkshake.jpeg';
-import chocoshake from '../images/chocoshake.jpeg';
+import butterscotch from '../images/butterscotch.jpeg';
+import caramel from '../images/caramel.jpg';
+import chocolate from '../images/chocolate.jpg';
+import icecream from '../images/icecream.jpeg';
+import strawberry from '../images/strawberry.webp';
+import vanilla from '../images/vanilla.jpg';
 import { useSession } from "next-auth/react";
 
-export default function BiriyaniMenu() {
+export default function IcecreamMenu() {
   const { data: session, status } = useSession();
   const username = session?.user?.name;
   const menuitems = [
-    { id: 1, name: 'Mango juice', price: 15, description: 'Fresh mango juice', image: mango },
-    { id: 2, name: 'Apple juice', price: 20, description: 'Chilled apple juice', image: apple },
-    { id: 3, name: 'Orange juice', price: 20, description: 'Refreshing orange juice', image: orange },
-    { id: 4, name: 'Oreo shake', price: 20, description: 'Creamy oreo shake', image: oreo },
-    { id: 5, name: 'Milkshake', price: 20, description: 'Classic milkshake', image: milkshake },
-    { id: 6, name: 'Chocolate shake', price: 20, description: 'Rich chocolate shake', image: chocoshake },
+    { id: 1, name: 'Butterscotch', price: 30, description: 'Creamy butterscotch ice cream', image: butterscotch },
+    { id: 2, name: 'Caramel', price: 35, description: 'Rich caramel ice cream', image: caramel },
+    { id: 3, name: 'Chocolate', price: 35, description: 'Classic chocolate ice cream', image: chocolate },
+    { id: 4, name: 'Ice Cream', price: 25, description: 'Delicious vanilla ice cream', image: icecream },
+    { id: 5, name: 'Strawberry', price: 30, description: 'Fresh strawberry ice cream', image: strawberry },
+    { id: 6, name: 'Vanilla', price: 25, description: 'Classic vanilla ice cream', image: vanilla },
   ];
 
   const { addToCart } = useContext(CartContext);
@@ -29,7 +29,7 @@ export default function BiriyaniMenu() {
     <div className="min-h-screen bg-white">
       <br /><br />
       <h1 className="font-bold text-xl md:text-2xl ml-4 md:ml-10 text-lime-800 border-lime-950 border-2 w-44 md:w-56 p-1 rounded-xl">
-        JUICES & SHAKES
+        ICE CREAMS
       </h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-10 px-4 md:px-20">
         {menuitems.map((item) => (

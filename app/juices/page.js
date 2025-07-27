@@ -48,14 +48,13 @@ export default function BiriyaniMenu() {
             <h2 className="font-serif font-bold text-lg mt-3 text-lime-700">{item.name}</h2>
             <p className="font-light text-sm text-gray-700">{item.description}</p>
             <p className="mt-1 text-base font-semibold text-lime-800">Price: ₹{item.price}</p>
-            {showCartButton && (
               <button
                 className="mt-4 bg-lime-400 rounded-lg w-[130px] h-[35px] text-white font-semibold transition duration-300 ease-in-out transform hover:bg-lime-500 hover:shadow-lg hover:scale-105"
                 onClick={() => addToCart(item, username)}
               >
                 Add to Cart
               </button>
-            )}
+          
           </div>
         ))}
       </div>
