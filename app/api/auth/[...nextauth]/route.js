@@ -1,10 +1,8 @@
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
-import FacebookProvider from "next-auth/providers/facebook";
 import bcrypt from "bcryptjs";
 import { DetailsModel } from "@/models/user";
-import { getMaxAge } from "next/dist/server/image-optimizer";
 
 export const authOptions = {
     providers: [
@@ -41,6 +39,7 @@ export const authOptions = {
                 
               
                 return { id: user._id.toString(), name: user.username, email: user.email };
+                // if it is successful then we return user object where nextauth uses this user object to create "jwt"
                 
 
             },
@@ -61,10 +60,12 @@ export const authOptions = {
                 token.uid = user.id;
                 token.email = user.email;
             } 
-            return token;
+            return token; //The token object represents the JWT payload.
+            // The token returned from this callback is what NextAuth.js will sign and place into the HTTP-only cookie.
         },
         session: async ({ session, token }) => {
-            // Send properties to the client session
+            //Purpose: To modify the client-side session object (session) that your React components will receive. 
+            //It's about deciding what information from the JWT (token) should be exposed to the client.
             //If the token is successfully verified, NextAuth then calls your session callback. The purpose of this callback is to control what information from the token is exposed to the client-side session object (which you access with the useSession hook).
             session.user.id = token.uid;
             session.user.email = token.email;  // Attach user ID to the session
@@ -77,7 +78,7 @@ export const authOptions = {
     
 };
 
-const handler = NextAuth(authOptions)
+const handler = NextAuth(authOptions);  //This creates the NextAuth.js API route handler.
 
 export { handler as GET, handler as POST }
 
@@ -107,3 +108,8 @@ export { handler as GET, handler as POST }
 //       session.user.id = token.uid
 //         ↓
 // Returned to client via useSession()
+
+
+
+// JWT is the information (the identity proof, the credentials, the data payload).
+// Cookie is the vehicle (the mechanism to carry and store that JWT between the server and the browser).

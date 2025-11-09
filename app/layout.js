@@ -5,7 +5,6 @@ import Footer from './components/Footer';
 import Providers from "./components/providers";
 import Protected from "./components/protected";
 import { CartProvider } from "./context/CartContext";
-import { OrderStatusProvider } from "./context/orderStatus";
 
 export default function RootLayout({ children }) {
   return (
@@ -13,7 +12,6 @@ export default function RootLayout({ children }) {
       <body className="bg-white text-gray-900">
         <Providers>
           <Protected>
-            <OrderStatusProvider>
               <CartProvider>
                 <div className="flex flex-col min-h-screen">
                   <header className="sticky top-0 z-30 bg-white shadow-sm">
@@ -27,7 +25,6 @@ export default function RootLayout({ children }) {
                   </footer>
                 </div>
               </CartProvider>
-            </OrderStatusProvider>
           </Protected>
         </Providers>
       </body>
