@@ -60,8 +60,8 @@ export default function SignUp() {
                         width={80}
                         height={80}
                         className="mb-4"
-                    />
-                    <span className="text-lime-700 font-bold text-2xl">Create Account</span>
+                    /> 
+                    <span className="text-lime-700 font-bold text-2xl">Create Account</span> 
                 </div>
                 <div className="w-full md:w-1/2 flex flex-col justify-center bg-slate-100 rounded-xl p-6">
                     <form onSubmit={handlesubmit} className="flex flex-col">
@@ -133,3 +133,4 @@ export default function SignUp() {
         </div>
     );
 }
+//this is the updated file
